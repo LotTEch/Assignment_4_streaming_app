@@ -1,4 +1,4 @@
-# GUI/view/table_view.py
+# gui/view/table_view.py
 
 import pandas as pd
 from awesome_table import AwesomeTable

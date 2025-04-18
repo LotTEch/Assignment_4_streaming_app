@@ -148,7 +148,7 @@ This project is a **streaming app for music**, designed to manage users, playlis
 ### 5. **Documentation**
 
 - **API Docs**: Use tools like Swagger or Redoc to generate API documentation.
-- **User Guide**: Write a guide for setting up and using the application.
+- **User guide**: Write a guide for setting up and using the application.
 - **Code Comments**: Add comments to all files for better maintainability.
 
 ---

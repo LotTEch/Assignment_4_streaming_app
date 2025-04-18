@@ -1,4 +1,4 @@
-# GUI/view/compare_view.py
+# gui/view/compare_view.py
 import streamlit as st
 from app.backend.api import get_users, get_songs
 

@@ -1,10 +1,12 @@
-# layout/window.py
 import streamlit as st
-from layout.sidebar import show_sidebar
-from layout.views import show_view
+from app.gui.layout.sidebar import show_sidebar
+from app.gui.layout.views import show_view
 
 def init_layout():
-    st.set_page_config(layout="wide")
+    """
+    Initialiserer layouten for Streamlit-applikasjonen.
+    """
+    st.set_page_config(layout="wide")  # Sett bred layout for applikasjonen
 
-    show_sidebar()  # Sidebar med valg
-    show_view()     # Hovedvindu basert på valg
+    show_sidebar()  # Viser sidepanelet
+    show_view()     # Viser hovedvinduet basert på brukerens valg

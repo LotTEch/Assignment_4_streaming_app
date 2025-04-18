@@ -1,0 +1,15 @@
+# .gitignore
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+.vscode/
+# Ignorer miljøvariabler
+.env
+
+# Ignorer text_files-mappen og alt under den
+text_files/
+
+pictures/
+# Ignorer bilder-mappen og alt under den

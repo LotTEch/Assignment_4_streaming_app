@@ -1,7 +1,8 @@
-import os
+from dotenv import load_dotenv
+import os  # Legg til denne linjen for å bruke os.getenv()
 
 # Last inn miljøvariabler fra .env-filen
-os.load_dotenv()
+load_dotenv()
 
 # Hent databasekonfigurasjon fra miljøvariabler
 DB_HOST = os.getenv("DB_HOST")
