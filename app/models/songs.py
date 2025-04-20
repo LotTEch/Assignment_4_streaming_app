@@ -13,3 +13,4 @@ class Song(Base):
     artist_id = Column(Integer, ForeignKey('artists.id'))
 
     artist = relationship("Artist", back_populates="songs")
+    listening_histories = relationship("ListeningHistory", back_populates="song")  # Relasjon til ListeningHistory

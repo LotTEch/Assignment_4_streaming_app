@@ -4,16 +4,18 @@ from app.backend.db import Base  # Oppdatert importbane
 
 class User(Base):
     __tablename__ = 'users'
+
     id = Column(Integer, primary_key=True)
-    first_name = Column(String)
-    last_name = Column(String)
+    first_name = Column(String, nullable=False)
+    last_name = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
-    user_type = Column(String)
-    registration_date = Column(Date)
+    registration_date = Column(Date, default=None)
+    account_type_id = Column(Integer, ForeignKey("account_types.id"))
 
-    free_user = relationship("FreeUser", back_populates="user", uselist=False)
-    premium_user = relationship("PremiumUser", back_populates="user", uselist=False)
-
+    account_type = relationship("AccountType", back_populates="users")
+    subscriptions = relationship("Subscription", back_populates="user")  # Relasjon til Subscription
+    listening_history = relationship("ListeningHistory", back_populates="user")  # Relasjon til ListeningHistory
+    
 class FreeUser(Base):
     __tablename__ = 'free_users'
     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)

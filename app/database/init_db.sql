@@ -1,12 +1,16 @@
--- Forbedret SQL med begrensninger, indekser, triggers og prosedyrer
-
+-- =========================
+-- Oppretter tabellen for kontotyper
+-- =========================
 CREATE TABLE account_types (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    ads_enabled BOOLEAN DEFAULT TRUE,
-    plan_type VARCHAR(50) CHECK (plan_type IN ('monthly', 'yearly', 'free'))
+    name VARCHAR(50) NOT NULL UNIQUE, -- Navn på kontotype, må være unik
+    ads_enabled BOOLEAN DEFAULT TRUE, -- Om reklame vises
+    plan_type VARCHAR(50) CHECK (plan_type IN ('monthly', 'yearly', 'free')) -- Begrensede verdier
 );
 
+-- =========================
+-- Oppretter brukertabellen
+-- =========================
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
@@ -18,6 +22,9 @@ CREATE TABLE users (
 
 CREATE INDEX idx_users_email ON users(email);
 
+-- =========================
+-- Tabell for artister
+-- =========================
 CREATE TABLE artists (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -25,6 +32,9 @@ CREATE TABLE artists (
     country VARCHAR(100)
 );
 
+-- =========================
+-- Tabell for sanger
+-- =========================
 CREATE TABLE songs (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -36,6 +46,9 @@ CREATE TABLE songs (
 
 CREATE INDEX idx_songs_release_date ON songs(release_date);
 
+-- =========================
+-- Tabell for spillelister
+-- =========================
 CREATE TABLE playlists (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
@@ -44,6 +57,9 @@ CREATE TABLE playlists (
     song_count INTEGER DEFAULT 0
 );
 
+-- =========================
+-- Mange-til-mange relasjon mellom spillelister og sanger
+-- =========================
 CREATE TABLE playlist_songs (
     playlist_id INTEGER REFERENCES playlists(id),
     song_id INTEGER REFERENCES songs(id),
@@ -52,6 +68,9 @@ CREATE TABLE playlist_songs (
     PRIMARY KEY (playlist_id, song_id)
 );
 
+-- =========================
+-- Lyttehistorikk
+-- =========================
 CREATE TABLE listening_history (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
@@ -62,6 +81,9 @@ CREATE TABLE listening_history (
 
 CREATE INDEX idx_listening_history_timestamp ON listening_history(listened_at);
 
+-- =========================
+-- Abonnementstabell
+-- =========================
 CREATE TABLE subscriptions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
@@ -70,7 +92,9 @@ CREATE TABLE subscriptions (
     type VARCHAR(50)
 );
 
--- Trigger for å holde styr på antall sanger i en spilleliste
+-- =========================
+-- Trigger: Oppdater antall sanger i en spilleliste
+-- =========================
 CREATE OR REPLACE FUNCTION update_song_count() RETURNS TRIGGER AS $$
 BEGIN
     UPDATE playlists SET song_count = song_count + 1
@@ -84,14 +108,16 @@ AFTER INSERT ON playlist_songs
 FOR EACH ROW
 EXECUTE FUNCTION update_song_count();
 
--- Stored Procedure for å hente mest spilte sanger
+-- =========================
+-- Lagret prosedyre: Hent de mest spilte sangene
+-- =========================
 CREATE OR REPLACE FUNCTION get_most_played_songs()
 RETURNS TABLE(song_id INTEGER, play_count INTEGER) AS $$
 BEGIN
     RETURN QUERY
-    SELECT song_id, COUNT(*) as play_count
-    FROM listening_history
-    GROUP BY song_id
+    SELECT lh.song_id, COUNT(*) as play_count
+    FROM listening_history lh
+    GROUP BY lh.song_id
     ORDER BY play_count DESC
     LIMIT 10;
 END;

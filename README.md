@@ -148,7 +148,7 @@ This project is a **streaming app for music**, designed to manage users, playlis
 ### 5. **Documentation**
 
 - **API Docs**: Use tools like Swagger or Redoc to generate API documentation.
-- **User guide**: Write a guide for setting up and using the application.
+- **User de**: Write a de for setting up and using the application.
 - **Code Comments**: Add comments to all files for better maintainability.
 
 ---
@@ -168,3 +168,153 @@ This project is a **streaming app for music**, designed to manage users, playlis
 This project is well-structured and aligned with the EER diagram. By completing the missing components and following the outlined steps, you can build a robust and scalable streaming app for music. Let me know if you need help with any specific part of the implementation.
 
 ---
+
+# Streaming App for Music 🎵
+
+
+## Overview
+
+
+Dette prosjektet er en **streamingtjeneste for musikk**, som lar deg administrere brukere, spillelister, sanger og lyttehistorikk. Systemet er bygd med **Python**, **Streamlit**, **SQLAlchemy** og **MySQL**, og databasen er basert på et **EER-diagram** med fullstendig normalisering.
+
+---
+
+## Prosjektstruktur
+
+### 1. 📁 `database/`
+
+#### `init_db.sql`
+
+- **Formål**: Oppretter alle tabeller, indekser, constraints og triggere basert på EER-diagrammet.
+- **Dekker**: `users`, `account_types`, `artists`, `songs`, `playlists`, `playlist_songs`, `listening_history`, `subscriptions`
+- **Inneholder**:
+  - `FOREIGN KEY`-relasjoner
+  - `CHECK`-constraints (f.eks. epostvalidering, positive lengder)
+  - Trigger for å oppdatere antall sanger i spillelister
+  - Lagret prosedyre for å hente de mest spilte sangene
+
+#### `seed_data.sql`
+
+- **Formål**: Populerer databasen med testdata for utvikling og testing.
+- **Inneholder**:
+  - Eksempeldata for brukere, artister, sanger, spillelister og lyttehistorikk
+  - Full respekt for fremmednøkkel-relasjoner
+
+---
+
+### 2. 📂 `backend/`
+
+#### `config.py`
+
+- Leser databasenøkkel fra `.env`
+- Klargjort for ulike miljøer (lokalt, test, prod)
+
+#### `db.py`
+
+- Konfigurerer `SQLAlchemy` motor, sesjon og baseklasse
+- Brukes til å opprette tabeller fra modeller
+
+#### `crud/`
+
+- Inneholder CRUD-funksjoner for:
+  - `users.py`: Opprett, hent, oppdater, slett brukere
+  - `songs.py`: Operasjoner for sanger og artister
+  - `playlists.py`: Håndtering av spillelister og sanger i dem
+  - `subscriptions.py`: Opprett og administrer abonnement
+
+#### `models/`
+
+- Python-klasser som representerer tabeller i databasen
+- Eksempler:
+  - `users.py` (inkl. relasjoner til `account_types`, `subscriptions`, `listening_history`)
+  - `songs.py` (inkl. relasjon til `artists` og `listening_history`)
+  - `playlists.py`, `playlist_songs.py`
+  - `listening_history.py`, `subscription.py`, `account_types.py`, `artists.py`
+
+---
+
+### 3. 📃 App-filer
+
+#### `main.py`
+
+- Streamlit-GUI som lar brukeren utføre CRUD-operasjoner
+- Meny for: Brukere, Sanger, Spillelister, Statistikk
+- Dynamisk skjema for input og visning av data
+
+#### `api.py`
+
+- Knytte sammen `CRUD` og `models`
+- Returnerer data fra tabellene til GUI
+
+#### `visualizations.py`
+
+- Bruker SQL og ORM til å hente og visualisere:
+  - Mest spilte sanger (top 10)
+  - Fordeling av abonnementstyper
+- Bruker `Plotly` for å lage interaktive grafer
+
+---
+
+## Fremtidige steg
+
+### 1. 📊 Forbedre database
+
+- Legg til flere `CHECK`-begrensninger og indekser
+- Lag backup-script og importfunksjon for data
+
+### 2. 🤖 Python-utvikling
+
+- Legg til flere API-funksjoner (f.eks. brukerspesifikk aktivitet)
+- Bedre feilhåndtering og logging
+
+### 3. 🚩 API-utvikling
+
+- Utvid `api.py` med flere tabeller
+- Legg til filtrering, sortering og paginering
+
+### 4. 📊 Visualisering
+
+- Bruk Dashboards (eks: Streamlit tabs eller Plotly Dash)
+- Eksportfunksjon (CSV, Excel)
+
+### 5. 📖 Dokumentasjon
+
+- Generer automatisk dokumentasjon med `pdoc` eller Swagger
+- Forklar arkitektur og datamodell
+
+---
+
+## Vurdering av prosjektet per nå
+
+| Komponent | Status | Kommentar |
+|----------|--------|-----------|
+| Database | ✅ | Strukturert, normalisert, komplett |
+| Backend  | ✅ | CRUD-funksjoner og modeller på plass |
+| GUI      | ✅ | Streamlit med dynamiske skjema |
+| Visualisering | ✅ | Interaktive grafer fra real-time data |
+| Dokumentasjon | ✅ | README under utvikling, godt grunnlag |
+
+---
+
+## Konklusjon
+
+Prosjektet er ryddig strukturert, og det er god sammenheng mellom database, modeller og GUI. Med den siste justeringen (overgang fra `user_type` til `account_type_id`) er alle strukturelle avvik mellom modell og database rettet opp.
+
+Du har et sterkt fundament for innlevering eller videreutvikling.
+
+---
+
+## 🌟 Bonus: Hva du får hjelp med videre
+
+### 1. README.md generert (denne teksten)
+
+### 2. EER-diagram:
+
+- Vi lager et diagram for deg i Draw.io-format eller som bilde basert på `init_db.sql`
+
+### 3. Testing
+
+- Jeg hjelper deg gjerne med en `test_api.py` som bruker `pytest` for å teste alle CRUD-funksjoner automatisk
+
+Vil du jeg starter med ⊕ EER-diagram eller ⊕ testing først?
+
